@@ -133,3 +133,40 @@ def test_one_best_observation_per_vessel():
     ]
 
     assert len(vessel_ids) == len(set(vessel_ids))
+def test_corridor_boundary_counts_as_inside():
+    ais = pd.DataFrame([
+        {
+            "vessel_id": "BOUNDARY_VESSEL",
+            "timestamp": "2026-08-30T12:00:00Z",
+            "latitude": 12.495,
+            "longitude": 74.795,
+            "speed": 10.0,
+            "heading": 90.0
+        }
+    ])
+
+    ais["timestamp"] = pd.to_datetime(
+        ais["timestamp"],
+        utc=True
+    )
+
+    with open(
+        "outputs/sample_hindcast.geojson",
+        "r",
+        encoding="utf-8"
+    ) as file:
+        hindcast = json.load(file)
+
+    corridor = shape(
+        hindcast["source_corridor"]["geometry"]
+    )
+
+    candidates = rank_candidates(
+        ais_df=ais,
+        corridor=corridor,
+        detection_time="2026-08-30T12:00:00Z"
+    )
+
+    assert len(candidates) == 1
+    assert candidates[0]["vessel_id"] == "BOUNDARY_VESSEL"
+    assert candidates[0]["relevance_score"] == 100

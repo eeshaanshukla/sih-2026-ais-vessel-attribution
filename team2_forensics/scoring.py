@@ -110,7 +110,7 @@ def calculate_temporal_score(time_gap_minutes):
 def calculate_track_score(point, corridor):
     """Score whether a vessel position lies inside the corridor."""
 
-    if corridor.contains(point):
+    if corridor.covers(point):
         return 100
 
     return 0
