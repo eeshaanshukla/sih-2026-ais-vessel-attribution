@@ -1,0 +1,45 @@
+import json
+
+import pandas as pd
+from shapely.geometry import shape
+
+from team2_forensics.scoring import rank_candidates
+
+
+def test_candidate_ranking():
+    ais = pd.read_csv("data/synthetic_ais.csv")
+
+    ais["timestamp"] = pd.to_datetime(
+        ais["timestamp"],
+        utc=True
+    )
+
+    with open(
+        "outputs/sample_hindcast.geojson",
+        "r",
+        encoding="utf-8"
+    ) as file:
+        hindcast = json.load(file)
+
+    corridor = shape(
+        hindcast["source_corridor"]["geometry"]
+    )
+
+    candidates = rank_candidates(
+        ais_df=ais,
+        corridor=corridor,
+        detection_time="2026-08-30T12:00:00Z"
+    )
+
+    assert len(candidates) == 3
+
+    for candidate in candidates:
+        assert "vessel_id" in candidate
+        assert "relevance_score" in candidate
+        assert "distance_km" in candidate
+        assert "time_gap_minutes" in candidate
+        assert "reason" in candidate
+
+        assert 0 <= candidate["relevance_score"] <= 100
+        assert candidate["distance_km"] >= 0
+        assert candidate["time_gap_minutes"] >= 0

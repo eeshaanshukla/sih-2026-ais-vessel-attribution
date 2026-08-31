@@ -1,0 +1,32 @@
+{
+  "incident_id": "INC001",
+  "trajectory": {
+    "type": "Feature",
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [74.795, 12.495],
+        [74.805, 12.500],
+        [74.815, 12.505],
+        [74.825, 12.510]
+      ]
+    },
+    "properties": {}
+  },
+  "source_corridor": {
+    "type": "Feature",
+    "geometry": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [74.795, 12.495],
+          [74.825, 12.505],
+          [74.825, 12.515],
+          [74.795, 12.505],
+          [74.795, 12.495]
+        ]
+      ]
+    },
+    "properties": {}
+  }
+}

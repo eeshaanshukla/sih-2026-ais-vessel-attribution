@@ -1,0 +1,47 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [74.810, 12.510]
+      },
+      "properties": {
+        "vessel_id": "VESSEL_A",
+        "relevance_score": 100,
+        "distance_km": 0.0,
+        "time_gap_minutes": 15,
+        "reason": "Vessel position intersects the source corridor with compatible timing"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [74.815, 12.505]
+      },
+      "properties": {
+        "vessel_id": "VESSEL_C",
+        "relevance_score": 100,
+        "distance_km": 0.0,
+        "time_gap_minutes": 0,
+        "reason": "Vessel position intersects the source corridor with compatible timing"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [74.805, 12.525]
+      },
+      "properties": {
+        "vessel_id": "VESSEL_B",
+        "relevance_score": 73,
+        "distance_km": 1.75,
+        "time_gap_minutes": 15,
+        "reason": "Close spatial and temporal match to source corridor"
+      }
+    }
+  ]
+}
