@@ -22,19 +22,64 @@ def run_attribution(
     # Load AIS data.
     ais = pd.read_csv(ais_path)
 
+    required_columns = {
+        "vessel_id",
+        "timestamp",
+        "latitude",
+        "longitude",
+        "speed",
+        "heading"
+    }
+
+    missing_columns = required_columns - set(ais.columns)
+
+    if missing_columns:
+        raise ValueError(
+            f"AIS data is missing required columns: "
+            f"{sorted(missing_columns)}"
+        )
+
     ais["timestamp"] = pd.to_datetime(
         ais["timestamp"],
-        utc=True
+        utc=True,
+        errors="coerce"
     )
 
+    if ais["timestamp"].isna().any():
+        raise ValueError(
+            "AIS data contains invalid timestamps."
+        )
+
     # Load Person A's hindcast output.
-    with open(hindcast_path, "r", encoding="utf-8") as file:
+    with open(
+        hindcast_path,
+        "r",
+        encoding="utf-8"
+    ) as file:
         hindcast = json.load(file)
+
+    # Validate the shared /hindcast contract.
+    if "source_corridor" not in hindcast:
+        raise ValueError(
+            "Hindcast output does not contain "
+            "'source_corridor'."
+        )
+
+    if "geometry" not in hindcast["source_corridor"]:
+        raise ValueError(
+            "source_corridor does not contain "
+            "'geometry'."
+        )
 
     # Extract the source corridor from the shared GeoJSON contract.
     corridor = shape(
         hindcast["source_corridor"]["geometry"]
     )
+
+    if corridor.is_empty:
+        raise ValueError(
+            "source_corridor geometry is empty."
+        )
 
     # Rank candidate vessels.
     candidates = rank_candidates(
@@ -59,4 +104,9 @@ if __name__ == "__main__":
         detection_time="2026-08-30T12:00:00Z"
     )
 
-    print(json.dumps(result, indent=2))
+    print(
+        json.dumps(
+            result,
+            indent=2
+        )
+    )
