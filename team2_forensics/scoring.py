@@ -67,18 +67,24 @@ def prepare_ais(ais_df):
 
 def calculate_distance_km(ais_gdf, corridor):
     """
-    Calculate approximate distance from each AIS position
-    to the source corridor in kilometres.
+    Calculate distance from each AIS position to the source
+    corridor in kilometres using a local UTM projection.
     """
 
-    # Project to a metric CRS for distance calculations.
-    projected = ais_gdf.to_crs("EPSG:32643")
-    corridor_projected = gpd.GeoSeries(
+    corridor_gdf = gpd.GeoSeries(
         [corridor],
         crs="EPSG:4326"
-    ).to_crs("EPSG:32643").iloc[0]
+    )
 
-    distances = projected.geometry.distance(corridor_projected)
+    # Automatically select the UTM zone containing the corridor.
+    utm_crs = corridor_gdf.estimate_utm_crs()
+
+    projected = ais_gdf.to_crs(utm_crs)
+    corridor_projected = corridor_gdf.to_crs(utm_crs).iloc[0]
+
+    distances = projected.geometry.distance(
+        corridor_projected
+    )
 
     return distances / 1000
 

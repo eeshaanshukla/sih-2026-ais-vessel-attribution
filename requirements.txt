@@ -3,3 +3,6 @@ geopandas
 shapely
 pyproj
 pytest
+fastapi
+uvicorn
+requests
