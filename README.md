@@ -4,6 +4,15 @@
 
 A geospatial vessel-attribution module for correlating oil-spill source corridors with AIS vessel observations and ranking candidate vessels based on spatial and temporal relevance.
 
+## Hackathon Achievement
+
+🏆 **Selected for the next round of SIH 2026**
+
+Our team was selected among **52 teams from 178 participating teams** during the internal hackathon round for the **Smart India Hackathon (SIH) 2026**.
+
+
+This selection recognizes the potential of our proposed system for satellite-based oil-spill detection, source reconstruction, and AIS-based vessel attribution.
+
 ---
 
 ## Table of Contents
